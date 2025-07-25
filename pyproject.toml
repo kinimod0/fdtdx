@@ -30,42 +30,53 @@ Documentation = "https://ymahlau.github.io/fdtdx/"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.ruff]
-target-version = "py312"
-line-length = 120
-fix = true
-exclude = ["examples", "slurm", "checks", "docs"]
-
-[tool.ruff.lint]
-extend-select = ["I"]
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-
-[project.optional-dependencies]
-dev = [
-    "black>=24.10.0",
-    "ipykernel>=6.29.5",
-    "mkdocs>=1.6.1",
-    "mkdocs-material>=9.5.48",
-    "mkdocstrings[python]>=0.27.0",
-    "mkdocs-jupyter",
-    "mkdocs-awesome-nav",
-    "pre-commit>=4.0.1",
-    "pymdown-extensions>=10.12",
-    "pytest>=8.3.4",
-    "pytest-cov>=6.0.0",
-    "ruff>=0.8.2",
-    "tox-uv>=1.16.1",
-    "pydoclint>=0.6.6",
-]
-cuda12 = [
-    "jax[cuda12]>=0.4.36",
-]
-rocm = [
-    "jax[rocm]>=0.4.36",
-]
 
 [tool.pyright]
 include = ["src", "examples", "checks", "test"]
 exclude = ["**/.venv"]
+
+[dependency-groups]
+cuda12 = [
+    "jax[cuda12]>=0.5.0",
+]
+dev = [
+    "ipykernel>=6.30.0",
+    "tox-uv>=1.26.2",
+    {include-group = "doc"},
+    {include-group = "lint"},
+    {include-group = "qa"},
+    {include-group = "test"},
+]
+dev-cuda = [
+    {include-group = "cuda12"},
+    {include-group = "dev"},
+]
+dev-rocm = [
+    {include-group = "rocm"},
+    {include-group = "dev"},
+]
+doc = [
+    "mkdocs>=1.6.1",
+    "mkdocs-awesome-nav>=3.1.2",
+    "mkdocs-jupyter>=0.25.1",
+    "mkdocs-material>=9.6.15",
+    "mkdocstrings[python]>=0.29.1",
+    "pymdown-extensions>=10.16",
+]
+lint = [
+    "pydoclint>=0.6.6",
+    "ruff>=0.12.4",
+]
+qa = [
+    "black>=25.1.0",
+    "pre-commit>=4.2.0",
+]
+rocm = [
+    "jax[rocm]>=0.5.0",
+]
+test = [
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
+]
